@@ -1,43 +1,36 @@
-public class lista1_ex2 {
+public class lista1_ex3 {
     public static void main(String[] args) {
-        int n = 6;
-        double[][] interv = funInterv(n);
-        for(int j = 0; j < n; j++) {
-            System.out.println("[" + interv[j][0] + ", " + interv[j][1] + "]");
-        }
-    }    
-
-    /* 
-     * Calcula o intervalo de troca de sinais da funcao f_Tn
-     * Entrada: tamanho da matriz (n)
-     * Saida: matriz n linhas x 2 colunas contendo o intervalo 
-     * onde ha troca de sinais
-    */ 
-    public static double[][] funInterv(int n) {
+        int n = 11;
         double lamb;
         double [] x = new double[3*n+1];
         double [] f = new double[3*n+1];
 
-        // calculando f_Tn(lambda) nos 3*n+1 pontos igualmente espacados
         for(int k = 0; k < (3*n+1); k++) {
             lamb = -2 + k*(4/(double)(3*n));
             x[k] = lamb;
             f[k] = funDet(n, lamb);
-            System.out.println("[" + (k+1) + "] f_T" + n + "(" + lamb + ") = " + f[k]);
         }
 
-        // verificando quando ocorre a troca de sinais
-        System.out.println("\nIntervalos de troca de sinal");
-        double[][] intvTroca = new double[n][2];
+        System.out.println("f_t" + n + "(lambda) = 0 em: ");
         int count = 0;
         for(int i = 0; i < 3*n ; i++) {
             if(f[i]*f[i+1] < 0) {
-                intvTroca[count][0] = x[i];
-                intvTroca[count][1] = x[i+1];
                 count++;
+                double m = x[i];
+                double M = x[i+1];
+                double alfa = (m + M)/2;
+                double prec = 1E-5;
+                while(funDet(n,alfa-prec)*funDet(n,alfa+prec) > 0) {
+                    double produto = funDet(n,m)*funDet(n,alfa);
+                    if(produto < 0) M = alfa;
+                    if(produto > 0) m = alfa;
+                    if(produto == 0) break;                    
+                    alfa = (m + M)/2; 
+                }
+                System.out.println("lambda" + count + " = " + alfa);
             }
         }
-        return intvTroca;
+
     }
 
     /* 
@@ -64,6 +57,7 @@ public class lista1_ex2 {
         }
         // sinal para calculo do determinante
         int sgn = 1;
+        
         // supondo que a matriz NAO eh singular
         boolean matrizSingular = false;
         boolean primeiraTrocaLinha = true;
@@ -112,9 +106,7 @@ public class lista1_ex2 {
         } else {              
             // calculo do determinante
             double det = sgn;
-            for(int i = 0; i < n; i++) {
-                det *= v[i][i];
-            }
+            for(int i = 0; i < n; i++) det *= v[i][i];
             return det;
         }
     } 

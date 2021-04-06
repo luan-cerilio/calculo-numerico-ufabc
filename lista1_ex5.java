@@ -1,11 +1,26 @@
-public class lista1_ex2 {
+public class lista1_ex5 {
     public static void main(String[] args) {
-        int n = 6;
+        int n = 11;
         double[][] interv = funInterv(n);
-        for(int j = 0; j < n; j++) {
-            System.out.println("[" + interv[j][0] + ", " + interv[j][1] + "]");
+        double prec = 1E-12;
+        int nmax = 100000;
+        System.out.println("f_T" + n);
+        for(int i = 0; i < n; i++) {
+            int count = 0;
+            // aprox inicial
+            double alfa = interv[i][0];
+            // intervalo de busca
+            double a = interv[i][0];
+            double b = interv[i][1];
+            while(funDet(n,alfa-prec)*funDet(n,alfa+prec) > 0 && count < nmax) {
+                count++;
+                if(a >= alfa && alfa <= b) {
+                    alfa = alfa - (funDet(n, alfa)/funDer(n, alfa));
+                }
+            }
+            System.out.println("Intervalo [" + a + "," + b + "] -> lambda = " + alfa + "; Iteracoes: " + count);
         }
-    }    
+    }
 
     /* 
      * Calcula o intervalo de troca de sinais da funcao f_Tn
@@ -23,11 +38,9 @@ public class lista1_ex2 {
             lamb = -2 + k*(4/(double)(3*n));
             x[k] = lamb;
             f[k] = funDet(n, lamb);
-            System.out.println("[" + (k+1) + "] f_T" + n + "(" + lamb + ") = " + f[k]);
         }
 
         // verificando quando ocorre a troca de sinais
-        System.out.println("\nIntervalos de troca de sinal");
         double[][] intvTroca = new double[n][2];
         int count = 0;
         for(int i = 0; i < 3*n ; i++) {
@@ -64,6 +77,7 @@ public class lista1_ex2 {
         }
         // sinal para calculo do determinante
         int sgn = 1;
+        
         // supondo que a matriz NAO eh singular
         boolean matrizSingular = false;
         boolean primeiraTrocaLinha = true;
@@ -112,13 +126,11 @@ public class lista1_ex2 {
         } else {              
             // calculo do determinante
             double det = sgn;
-            for(int i = 0; i < n; i++) {
-                det *= v[i][i];
-            }
+            for(int i = 0; i < n; i++) det *= v[i][i];
             return det;
         }
     } 
-    
+     
     /* 
      * Imprime uma mensagem de erro caso a matriz 
      * seja singular (diagonal com zero)
@@ -128,4 +140,22 @@ public class lista1_ex2 {
         System.out.println("---------------------------------");
     }
 
+    /* 
+     * Calcula o valor da derivada de f_Tn em lambda
+     * Entrada: tamanho da matriz (n) e auto-valor (lambda)
+     * Saida: valor da derivada em lambda
+    */ 
+    public static double funDer(int n, double lamb) {
+        double z = lamb/(double)2;
+        double derivada = 0;
+        if(lamb == 2) {
+            derivada = (Math.pow(n+1,5)-Math.pow(n+1,3))/(double)3;
+        } else if(lamb == -2) {
+            derivada = (Math.pow(-1,n+1)*((Math.pow(n+1,5)-Math.pow(n+1,3))/(double)3));
+        } else if(lamb > -2 && lamb < 2) {
+            derivada = ((n+1)*Math.cos((n+1)*Math.acos(z))-z*(Math.sin((n+1)*Math.acos(z))/Math.sin(Math.acos(z))))/((double)2*(Math.pow(z,2)-1));
+        }
+        return derivada;
+    }
+    
 }

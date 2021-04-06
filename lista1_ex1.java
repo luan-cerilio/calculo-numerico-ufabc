@@ -98,7 +98,7 @@ public class lista1_ex1 {
         }
     }
         
-    public static void imprimeErro () {
+    public static void imprimeErro() {
         System.out.println("ERRO: Matriz Singular");
         System.out.println("---------------------------------");
     }
