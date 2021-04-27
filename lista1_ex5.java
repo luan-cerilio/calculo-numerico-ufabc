@@ -14,7 +14,7 @@ public class lista1_ex5 {
             double b = interv[i][1];
             while(funDet(n,alfa-prec)*funDet(n,alfa+prec) > 0 && count < nmax) {
                 count++;
-                if(a >= alfa && alfa <= b) {
+                if(alfa >= a && alfa <= b) {
                     alfa = alfa - (funDet(n, alfa)/funDer(n, alfa));
                 }
             }

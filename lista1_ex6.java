@@ -47,7 +47,7 @@ public class lista1_ex6 {
 
             while(funDet(n,alfa-prec)*funDet(n,alfa+prec) > 0 && count < nmax) {
                 count++;
-                if(a >= alfa && alfa <= b) {
+                if(alfa >= a && alfa <= b) {
                     alfa = alfa - (funDet(n, alfa)/funDer(n, alfa));
                 }
             }

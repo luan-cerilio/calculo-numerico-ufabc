@@ -1,7 +1,7 @@
 public class lista1_ex4 {
     public static void main(String[] args) {
         double[] intervalo = {-1.9, -1.7, -1.4, 0, 1, 1.5, 2};
-        int n = 6;
+        int n = 11;
         double[] deriv = new double[intervalo.length];
         
         for(int i = 0; i < intervalo.length; i++) {
